@@ -10,9 +10,22 @@ import UIKit
 
 class PhotoSelectorCell: UICollectionViewCell {
     
+    var photoSelectCellDelegate: PhotoSelectorCellDelegate?
+    
+    
     var image: UIImage? {
         didSet {
-            
+            if image != nil {
+                addButton.setImage(image, for: UIControlState.normal)
+                addButton.isUserInteractionEnabled = false
+                deleteButton.isHidden = false
+            }
+            else {
+                addButton.setImage(UIImage(named: "compose_pic_add"), for: UIControlState.normal)
+                addButton.setImage(UIImage(named: "compose_pic_add_highlighted"), for: UIControlState.highlighted)
+                deleteButton.isHidden = true
+                addButton.isUserInteractionEnabled = true
+            }
         }
     }
     
@@ -44,7 +57,7 @@ class PhotoSelectorCell: UICollectionViewCell {
     }
     
     
-    // MARK: Lazy init
+    // MARK: Lazy initialization
     /// the button for selecting photos
     private lazy var addButton: UIButton = {
         let btn = UIButton()
@@ -59,7 +72,7 @@ class PhotoSelectorCell: UICollectionViewCell {
     private lazy var deleteButton: UIButton = {
         let btn = UIButton()
         btn.setImage(UIImage(named: "compose_photo_close"), for: UIControlState.normal)
-//        btn.isHidden = true
+        btn.isHidden = true
         btn.addTarget(self, action: #selector(deleteButtonTapped), for: UIControlEvents.touchUpInside)
         return btn
     }()
@@ -67,11 +80,11 @@ class PhotoSelectorCell: UICollectionViewCell {
     
     // MARK: Listeners
     @objc private func addButtonTapped() {
-        print(#function)
+        photoSelectCellDelegate?.cellDidSelect!(cell: self)
     }
     
     @objc private func deleteButtonTapped() {
-        print(#function)
+        photoSelectCellDelegate?.cellDidDelete!(cell: self)
     }
     
     
