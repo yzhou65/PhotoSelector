@@ -11,14 +11,20 @@ import UIKit
 private let reuseIdentifier = "Cell"
 
 class PhotoSelectorController: UICollectionViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    /// status bar style. In Swift 3, preferredStatusBarStyle becomes a get method-only variable and cannot be assigned by using self.preferredStatusBarStyle = UIStatusBarStyle.lightContent. Only can override its set-method
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Register cell classes
-        self.collectionView!.register(PhotoSelectorCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        collectionView!.register(PhotoSelectorCell.self, forCellWithReuseIdentifier: reuseIdentifier)
 
-        
+        // Put the whole collectionView below the StatusBar
+        collectionView!.contentInset = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
     }
     
     
@@ -57,7 +63,7 @@ class PhotoSelectorController: UICollectionViewController, UIImagePickerControll
 
 extension PhotoSelectorController: PhotoSelectorCellDelegate {
     func cellDidSelect(cell: PhotoSelectorCell) {
-        print(#function)
+//        print(#function)
         
         if !UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.photoLibrary) {
             print("Error. Fail to access the Photo Library.")
